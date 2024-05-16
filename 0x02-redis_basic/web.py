@@ -28,6 +28,7 @@ def data_cacher(method):
         return html
     return wrapper
 
+
 @data_cacher
 def get_page(url: str) -> str:
     '''return URL after adding cache.
