@@ -6,7 +6,7 @@ import requests
 from functools import wraps
 
 
-redis_store = redis.Redis()
+store = redis.Redis()
 
 
 def data_cacher(method):
@@ -23,7 +23,7 @@ def data_cacher(method):
         html = method(url)
 
         store.incr(count_key)
-        store.set(cached_key, html)
+        store.set(cached_key, html, ex=10)
         store.expire(cached_key, 10)
         return html
     return wrapper
@@ -33,3 +33,7 @@ def get_page(url: str) -> str:
     '''return URL after adding cache.
     '''
     return requests.get(url).text
+
+
+if __name__ == "__main__":
+    get_page('http://slowwly.robertomurray.co.uk')
